@@ -1,0 +1,27 @@
+name: Check Translations
+description: Check the translation files of a Minecraft mod
+
+inputs:
+  lang-dir:
+    description: The directory containing the translation files, usually `src/main/resources/assets/<your-mod>/lang`
+    required: true
+  wurst-mode:
+    description: Whether to apply extra checks specific to the Wurst Client
+    type: boolean
+    default: false
+
+runs:
+  using: composite
+  steps:
+
+  - name: Set up uv
+    uses: astral-sh/setup-uv@v6
+    with:
+      enable-cache: true
+
+  - name: Run main.py
+    run: |
+      uv run --project "${{ github.action_path }}" \
+      "${{ github.action_path }}/main.py" \
+      --lang-dir "${{ inputs.lang-dir }}" \
+      ${{ inputs.wurst-mode == 'true' ? '--wurst-mode' : '' }}

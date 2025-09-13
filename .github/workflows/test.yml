@@ -1,0 +1,47 @@
+name: Run Tests
+
+on:
+  push:
+    branches-ignore:
+    - "dependabot/**"
+    tags-ignore:
+    - "**"
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+        - repo: "Wurst-Imperium/Wurst7"
+          args: '--lang-dir "src/main/resources/assets/wurst/translations" --wurst-mode'
+        - repo: "Wurst-Imperium/WI-Zoom"
+          args: '--lang-dir "src/main/resources/assets/wi_zoom/lang"'
+        - repo: "Wurst-Imperium/Mo-Glass"
+          args: '--lang-dir "src/main/resources/assets/mo_glass/lang"'
+        - repo: "Wurst-Imperium/ChestESP"
+          args: '--lang-dir "src/main/resources/assets/chestesp/lang"'
+    steps:
+
+    - name: Checkout check-translations action
+      uses: actions/checkout@v5
+      with:
+        path: action
+
+    - name: Checkout repository to be checked
+      uses: actions/checkout@v5
+      with:
+        repository: ${{ matrix.repo }}
+        path: test-repo
+
+    - name: Set up uv
+      uses: astral-sh/setup-uv@v6
+      with:
+        enable-cache: true
+
+    - name: Run translation check
+      working-directory: test-repo
+      run: |
+        uv run --project "../action" "../action/main.py" ${{ matrix.args }}
