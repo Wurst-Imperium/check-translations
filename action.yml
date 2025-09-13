@@ -20,8 +20,9 @@ runs:
       enable-cache: true
 
   - name: Run main.py
+    shell: bash
     run: |
       uv run --project "${{ github.action_path }}" \
       "${{ github.action_path }}/main.py" \
       --lang-dir "${{ inputs.lang-dir }}" \
-      ${{ inputs.wurst-mode == 'true' ? '--wurst-mode' : '' }}
+      ${{ inputs.wurst-mode == 'true' && '--wurst-mode' || '' }}
