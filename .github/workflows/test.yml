@@ -44,4 +44,4 @@ jobs:
     - name: Run translation check
       working-directory: test-repo
       run: |
-        uv run --project "../action" "../action/main.py" ${{ matrix.args }}
+        uv run --locked --project "../action" "../action/main.py" ${{ matrix.args }}
