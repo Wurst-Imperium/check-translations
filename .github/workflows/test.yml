@@ -26,12 +26,12 @@ jobs:
     steps:
 
     - name: Checkout check-translations action
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
       with:
         path: action
 
     - name: Checkout repository to be checked
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
       with:
         repository: ${{ matrix.repo }}
         path: test-repo
